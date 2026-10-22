@@ -1,3 +1,9 @@
-function HomePage {}
+import PostContent from "./post-detail/post-content";
 
-export default HomePage;
+function PostDetailPagePage() {
+  return (
+    <PostContent></PostContent>
+  )
+}
+
+export default PostDetailPagePage;
