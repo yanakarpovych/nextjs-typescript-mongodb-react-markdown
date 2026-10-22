@@ -1,3 +1,3 @@
-function FeaturedPosts {}
+function FeaturedPosts() {}
 
 export default FeaturedPosts;
