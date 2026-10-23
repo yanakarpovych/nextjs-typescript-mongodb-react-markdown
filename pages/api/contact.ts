@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import type { ObjectId } from "mongodb";
+import clientPromise from "../../lib/mongodb";
 
 type MessageData = {
   email: string;
@@ -6,12 +8,16 @@ type MessageData = {
   message: string;
 };
 
-type ApiResponse = {
-  message: string;
-  data?: MessageData;
+type StoredMessage = MessageData & {
+  id: string;
 };
 
-function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
+type ApiResponse = {
+  message: string;
+  data?: StoredMessage;
+};
+
+async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).json({ message: "Method not allowed." });
@@ -32,16 +38,34 @@ function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
 
   const newMessage: MessageData = {
     email,
-    name,
-    message,
+    name: name.trim(),
+    message: message.trim(),
   };
 
-  console.log(newMessage);
+  try {
+    const client = await clientPromise;
+    const db = client.db("personal-blog");
 
-  return res.status(201).json({
-    message: "Successfully stored message!",
-    data: newMessage,
-  });
+    const result = await db
+      .collection<MessageData>("messages")
+      .insertOne(newMessage);
+
+    const storedMessage: StoredMessage = {
+      ...newMessage,
+      id: result.insertedId.toString(),
+    };
+
+    return res.status(201).json({
+      message: "Successfully stored message!",
+      data: storedMessage,
+    });
+  } catch (error) {
+    console.error("Failed to store contact message:", error);
+
+    return res.status(500).json({
+      message: "Failed to store message.",
+    });
+  }
 }
 
 export default handler;
