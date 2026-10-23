@@ -1,8 +1,10 @@
 import ReactMarkdown, { type Components } from "react-markdown";
 import Image from "next/image";
-import type { Post } from "@/types/post";
+import type { Post } from "../../../types/post";
 import PostHeader from "./post-header";
 import classes from "./post-content.module.css";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 type PostContentProps = {
   post: Post;
@@ -40,6 +42,18 @@ function PostContent({ post }: PostContentProps) {
         : `/images/posts/${post.slug}/${src}`;
 
       return <Image src={imageSrc} alt={alt ?? ""} width={600} height={300} />;
+    },
+
+    code({ className, children }) {
+      const match = /language-(\w+)/.exec(className ?? "");
+      const language = match?.[1] ?? "text";
+      const codeString = String(children).replace(/\n$/, "");
+
+      return (
+        <SyntaxHighlighter style={atomDark} language={language}>
+          {codeString}
+        </SyntaxHighlighter>
+      );
     },
   };
 
