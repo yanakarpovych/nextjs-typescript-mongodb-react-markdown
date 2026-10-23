@@ -1,21 +1,20 @@
+import ReactMarkdown from "react-markdown";
 import PostHeader from "./post-header";
 import classes from "./post-content.module.css";
+import { Post } from "@/types/post";
 
-const DUMMY_POST = {
-  slug: "getting-started-with-nextjs1",
-  title: "Getting started with Next.js",
-  image: "getting-started-nextjs.png",
-  date: "2026-10-22",
-  content: "# This is a first post",
+type PostContentProps = {
+  post: Post;
 };
 
-function PostContent() {
-  const imagePath = `/images/posts/${DUMMY_POST.slug}/${DUMMY_POST.image}`;
+function PostContent(props: PostContentProps) {
+  const { post } = props;
+  const imagePath = `/images/posts/${post.slug}/${post.image}`;
 
   return (
     <article className={classes.content}>
-      <PostHeader title={DUMMY_POST.title} image={imagePath}></PostHeader>
-      {DUMMY_POST.content}
+      <PostHeader title={post.title} image={imagePath}></PostHeader>
+      <ReactMarkdown>{post.content}</ReactMarkdown>
     </article>
   );
 }
