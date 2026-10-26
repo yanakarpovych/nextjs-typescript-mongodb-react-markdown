@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import classes from "./notification.module.css";
 
 type NotificationProps = {
@@ -19,11 +20,18 @@ function Notification({ title, message, status }: NotificationProps) {
 
   const cssClasses = `${classes.notification} ${statusClasses}`;
 
-  return (
+  const notificationRoot = document.getElementById("notifications");
+
+  if (!notificationRoot) {
+    return null;
+  }
+
+  return createPortal(
     <div className={cssClasses}>
       <h2>{title}</h2>
       <p>{message}</p>
-    </div>
+    </div>,
+    notificationRoot,
   );
 }
 
