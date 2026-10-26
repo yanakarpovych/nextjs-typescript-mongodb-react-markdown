@@ -1,7 +1,7 @@
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { getPostData, getPostsFiles } from "../../lib/post-utils";
 import { Post } from "../../types/post";
-import PostContent from "./post-detail/post-content";
+import PostContent from "../../components/posts/post-detail/post-content";
 import { Fragment } from "react/jsx-runtime";
 import Head from "next/head";
 

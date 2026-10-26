@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { ObjectId } from "mongodb";
 import clientPromise from "../../lib/mongodb";
 
 type MessageData = {
