@@ -2,6 +2,8 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { getPostData, getPostsFiles } from "../../lib/post-utils";
 import { Post } from "../../types/post";
 import PostContent from "./post-detail/post-content";
+import { Fragment } from "react/jsx-runtime";
+import Head from "next/head";
 
 type PostDetailPageProps = {
   post: Post;
@@ -12,7 +14,15 @@ type PostDetailParams = {
 };
 
 function PostDetailPage({ post }: PostDetailPageProps) {
-  return <PostContent post={post} />;
+  return (
+    <Fragment>
+      <Head>
+        <title>{post.title}</title>
+        <meta name="description" content={post.excerpt} />
+      </Head>
+      <PostContent post={post} />
+    </Fragment>
+  );
 }
 
 export const getStaticProps: GetStaticProps<
